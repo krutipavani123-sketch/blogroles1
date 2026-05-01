@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\loginmail;
+use App\Models\blog;
 
 class logincontroller extends Controller
 {
+
+
     public function login(Request $request)
     {
 
@@ -19,6 +22,11 @@ class logincontroller extends Controller
             'password' => 'required',
         ]);
 
+        login::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
 
         $user = login::where('email', $request->email)->first();
 
@@ -32,12 +40,9 @@ class logincontroller extends Controller
             $request->session()->regenerate();
 
             Mail::to($request->email)->send(new loginmail("You are Login", "You are login in blog management system"));
-
-
-            return redirect('welcome')->with('success', 'login success');
+            return redirect('welcome')->with('error', 'Invalid email or password');
+        } else {
+            return redirect('login')->with('error', 'Invalid email or password');
         }
-
-
-        return redirect('login')->with('error', 'Invalid email or password');
     }
 }

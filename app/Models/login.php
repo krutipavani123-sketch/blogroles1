@@ -5,10 +5,12 @@ namespace App\Models;
 // 1. You MUST import this specific class
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-// 2. Change "extends Model" to "extends Authenticatable"
+
 class login extends Authenticatable
 {
+    use HasApiTokens;
     use Notifiable;
 
     protected $table = 'logins';

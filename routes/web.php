@@ -6,9 +6,9 @@ use App\Http\Controllers\bloglistcontroller;
 use App\Http\Controllers\editcontroller;
 use App\Http\Controllers\logincontroller;
 use App\Http\Controllers\loginmailcontroller;
+use PHPUnit\Metadata\RequiresPhpunitExtension;
 
-
-
+Route::get('loginapi',[logincontroller::class,'loginapi']);
 
 Route::view('add-blog', 'welcome');
 Route::get('welcome', [bloglistcontroller::class, 'list']);
