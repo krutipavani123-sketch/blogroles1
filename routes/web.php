@@ -15,10 +15,10 @@ Route::get('welcome', [bloglistcontroller::class, 'list']);
 Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
 
 
-Route::view('/', 'register');
+//Route::view('/', 'register');
 Route::view('login', 'login');
 //  Route::view('welcome','welcome');
-Route::post('register', [logincontroller::class, 'register']);
+//Route::post('register', [logincontroller::class, 'register']);
 
 Route::post('login', [logincontroller::class, 'login']);
 Route::get('welcome', [bloglistcontroller::class, 'list']);
