@@ -64,6 +64,13 @@ class usertokencontroller extends Controller
     }
     function addblog(Request $request)
     {
+
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string'
+        ]);
+
+
         $data = blog::create(
             [
                 'title' => $request->title,
@@ -71,24 +78,90 @@ class usertokencontroller extends Controller
 
             ]
         );
+        //token = $data->createToken('mytoken')->plainTextToken;
 
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
+        if ($data) {
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'msg' => 'Data Added'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Data not added'
+            ]);
+        }
     }
 
+    function deleteblog(Request $request, $id)
+    {
+        $data = blog::find($id);
 
-    // function loginapi(Request $request)
-    // {
-    //     $input = $request->all();
+        if ($data) {
+            $data->delete();
+            return response()->json([
+                'success' => true,
+                'data' => 'Data Deleted'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'messsage' => "Data not deleted"
+            ]);
+        }
+    }
 
-    //     $input['password'] = Hash::make($input['password']);
-    //     $user = login::create($input);
-    //     $success['token'] = $user->createToken('mytoken')->plainTextToken;
-    //     $user['name'] = $user->name;
-
-    //     return ['success' => true, "result" => $success, "msg" => "user Login"];
-    // }
-
+    function updateblog(Request $request, $id)
+    {
+        $data = blog::find($id);
+        $data->title = $request->title;
+        $data->description = $request->description;
+        $data->save();
+        if ($data) {
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'msg' => 'Data Updated'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Data not updated'
+            ]);
+        }
+    }
 }
+
+        // function editblog(Request $request, $id)
+        // {
+        //     $data = blog::find($id);
+        //     $data->title = $request->title;
+        //     $data->description = $request->description;
+        //     return response()->json([
+        //         'success' => true,
+        //         'data' => $data
+        //     ]);
+        // }
+        // function updateblog(Request $request, $id)
+        // {
+        //     $data = blog::find($id);
+        //     $data->title = $request->title;
+        //     $data->description = $request->description;
+        //     $data->save();
+        //     return response()->json([
+        //         'success' => true,
+        //         'data' => $data
+        //     ]);
+        // }
+        // function loginapi(Request $request)
+        // {
+        //     $input = $request->all();
+
+        //     $input['password'] = Hash::make($input['password']);
+        //     $user = login::create($input);
+        //     $success['token'] = $user->createToken('mytoken')->plainTextToken;
+        //     $user['name'] = $user->name;
+
+        //     return ['success' => true, "result" => $success, "msg" => "user Login"];
+        // }

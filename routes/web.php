@@ -8,7 +8,7 @@ use App\Http\Controllers\logincontroller;
 use App\Http\Controllers\loginmailcontroller;
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
-Route::get('loginapi',[logincontroller::class,'loginapi']);
+Route::get('loginapi', [logincontroller::class, 'loginapi']);
 
 Route::view('add-blog', 'welcome');
 Route::get('welcome', [bloglistcontroller::class, 'list']);
@@ -49,7 +49,8 @@ Route::view('send-mail', 'sendmail');
 
 // To handle the form submission
 
-
+Route::get('addblog', [bloglistcontroller::class, 'addblog']);
+Route::post('addblog', [bloglistcontroller::class, 'addblog']);
 
 
 

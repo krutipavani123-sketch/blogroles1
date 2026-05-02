@@ -20,13 +20,26 @@ Route::get('user/{id}', [apicontroller::class, 'singleuser']);
 Route::post('register', [usertokencontroller::class, 'register']);
 Route::post('login', [usertokencontroller::class, 'loginapi']);
 
+//Route::post('addblog', [usertokencontroller::class, 'addblog']);
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    Route::get('bloglist', [usertokencontroller::class, 'bloglist']);
+
+    Route::get('deleteblog/{id}', [usertokencontroller::class, 'deleteblog']);
+
+    Route::post('addblog', [usertokencontroller::class, 'addblog']);
+
+
+    Route::get('updateblog/{id}', [usertokencontroller::class, 'updateblog']);
+});
+// Route::post('updateblog', [usertokencontroller::class, 'updateblog']);
+
+// Route::get('editblog', [usertokencontroller::class, 'editblog']);
+// Route::post('editblog', [usertokencontroller::class, 'editblog']);
+
+
 //Route::post('login', [logincontroller::class, 'login']);
-
-Route::post('addblog', [usertokencontroller::class, 'addblog']);
-
-Route::get('bloglist', [usertokencontroller::class, 'bloglist']);
-
-
 // Route::group(['middleware' => 'auth:sanctum'], function () {
 //     Route::get('delete/{id}', [bloglistcontroller::class, 'delete']);
 
