@@ -16,7 +16,7 @@
 
 
     <table border="1" class="table table-bordered table-sm">
-        <tr>
+        <tr >
             <td>id</td>
             <td>Title</td>
             <td>Description</td>
@@ -30,14 +30,27 @@
             <td>{{ $datas->title }}</td>
             <td>{{ $datas->description }}</td>
             <td>
-                <a href="{{ 'delete/'.$datas->id }}">Delete</a>
-                <a href="{{ 'edit/'.$datas->id }}">Update</a>
+                <a href="{{ 'delete/'.$datas->id }}"><i class="bi bi-trash2-fill"></i></a>
+                <a href="{{ 'edit/'.$datas->id }}"><i class="bi bi-pencil-square"></i></a>
             </td>
         </tr>
           @endforeach
     </table>
+    <div>
+   {{ $data->links() }}
+    </div>
+ 
     @endsection
     
+
+    <style>
+
+        .w-5.h-5 {
+            width: 20px;
+            margin-left: auto; 
+            margin-right: 0;
+  }
+    </style>
 {{-- <div>
     <h1>Blog List</h1>
 

@@ -131,8 +131,35 @@ class usertokencontroller extends Controller
             ]);
         }
     }
+    public function search(Request $request)
+    {
+        $search = $request->search;
+
+        $data = blog::where('title', 'like', '%' . $search . '%')->get();
+
+
+        if (!$data->isEmpty()) {
+            return response()->json([
+                "success" => true,
+                "data" => $data
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                'msg' => 'No such Data'
+            ]);
+        }
+    }
 }
 
+// function search(Request $request)
+//     {
+//         $data = blog::where('title', 'like', "%$request->search%")->get();
+//         return response()->json([
+//             "success"=> true,
+//             "data"=> $data
+//             ]);
+//     }
         // function editblog(Request $request, $id)
         // {
         //     $data = blog::find($id);

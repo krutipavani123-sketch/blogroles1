@@ -13,8 +13,8 @@ class login extends Authenticatable
     use HasApiTokens;
     use Notifiable;
 
-    protected $primaryKey = 'id';
-    public $incrementing = true;
+    // protected $primaryKey = 'id';
+    // public $incrementing = true;
 
 
     protected $table = 'logins';

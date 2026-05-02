@@ -45,10 +45,10 @@ class bloglistcontroller extends Controller
 
     function list()
     {
-        $data = DB::table("blogs")->get();
+        $data = blog::paginate(5);
         return view("bloglist", ["data" => $data]);
-        $data = blogs::all();
-        return $data;
+        // $data = blogs::all();
+        // return $data;
     }
 
     function delete($id)
@@ -81,7 +81,7 @@ class bloglistcontroller extends Controller
 
     function search(Request $request)
     {
-        $data = blog::where('title', 'like', "%$request->search%")->get();
+        $data = blog::where('title', 'like', "%$request->search%")->paginate(5);
         return view("bloglist", ["data" => $data, 'search' => $request->search]);
     }
 }

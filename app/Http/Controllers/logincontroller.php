@@ -30,6 +30,7 @@ class logincontroller extends Controller
             if (Hash::check($request->password, $user->password)) {
 
 
+            
                 Auth::login($user);
 
 
@@ -47,6 +48,7 @@ class logincontroller extends Controller
                 'password' => bcrypt($request->password),
             ]);
             Auth::login($newuser);
+
             return redirect('welcome')->with('success', 'Login');
         }
     }

@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     Route::get('updateblog/{id}', [usertokencontroller::class, 'updateblog']);
+        Route::get('search', [usertokencontroller::class, 'search']);
 });
 // Route::post('updateblog', [usertokencontroller::class, 'updateblog']);
 
