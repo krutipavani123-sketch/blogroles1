@@ -12,15 +12,14 @@
         
 
     </form>
-<a href="{{ url('add-blog') }}" class="btn btn-info" style="margin-bottom: 20px; color: white; text-decoration: none;">Add Blog</a>
 
 
     <table  border="1" class="table table-bordered table-sm">
         <tr >
-            <td data-field="id" data="sortable=true">id</td>
+            <td>id</td>
             <td>Title</td>
             <td>Description</td>
-            <td>Action</td>
+       
         </tr>
     
     @foreach($data as  $datas)
@@ -29,10 +28,7 @@
             <td>{{ $datas->id }}</td>
             <td>{{ $datas->title }}</td>
             <td>{{ $datas->description }}</td>
-            <td>
-                <a href="{{ 'delete/'.$datas->id }}"><i class="bi bi-trash2-fill"></i></a>
-                <a href="{{ 'edit/'.$datas->id }}"><i class="bi bi-pencil-square"></i></a>
-            </td>
+            
         </tr>
           @endforeach
     </table>

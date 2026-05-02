@@ -29,11 +29,7 @@ class logincontroller extends Controller
 
             if (Hash::check($request->password, $user->password)) {
 
-
-            
                 Auth::login($user);
-
-
                 $request->session()->regenerate();
 
                 Mail::to($request->email)->send(new loginmail("You are Login", "You are login in blog management system"));

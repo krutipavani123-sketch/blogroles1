@@ -10,18 +10,7 @@ use Illuminate\Support\Facades\DB;
 class bloglistcontroller extends Controller
 {
 
-    // function bloglist(Request $request)
-    // {
-    //     $data = new blog;
-    //     $data->title = $request->title;
-    //     $data->description = $request->description;
-    //     $data->save();
-    //     if ($data) {
-    //         return redirect('list');
-    //     } else {
-    //         return "Something went wrong";
-    //     }
-    // }
+
     function bloglist(Request $request)
     {
         $request->validate([
@@ -32,6 +21,7 @@ class bloglistcontroller extends Controller
         $data = new blog;
         $data->title = $request->title;
         $data->description = $request->description;
+        $data->user_id = auth()->id();
         $data->save();
 
         if ($data) {
@@ -45,10 +35,8 @@ class bloglistcontroller extends Controller
 
     function list()
     {
-        $data = blog::paginate(5);
+        $data = Blog::where('user_id', auth()->id())->paginate(4);
         return view("bloglist", ["data" => $data]);
-        // $data = blogs::all();
-        // return $data;
     }
 
     function delete($id)
@@ -81,7 +69,29 @@ class bloglistcontroller extends Controller
 
     function search(Request $request)
     {
-        $data = blog::where('title', 'like', "%$request->search%")->paginate(5);
+        $data = blog::where('title', 'like', "%$request->search%")->paginate(4);
         return view("bloglist", ["data" => $data, 'search' => $request->search]);
     }
 }
+
+
+// function list()
+//     {
+//         if (auth()->check()) {
+//             $data = blog::where('user_id', auth()->id())->paginate(5);
+//         } else {
+//             $data = blog::paginate(5);
+//             return view("bloglist", ["data" => $data]);
+//         }
+//         return view("bloglist", ["data" => $data]);
+
+//         // $data = blogs::all();
+//         // return $data;
+//     }
+    // function list()
+    // {
+    //     $data = blog::paginate(5);
+    //     return view("bloglist", ["data" => $data]);
+    //     // $data = blogs::all();
+    //     // return $data;
+    // }

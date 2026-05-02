@@ -20,7 +20,7 @@ Route::get('user/{id}', [apicontroller::class, 'singleuser']);
 Route::post('register', [usertokencontroller::class, 'register']);
 Route::post('login', [usertokencontroller::class, 'loginapi']);
 
-//Route::post('addblog', [usertokencontroller::class, 'addblog']);
+
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
@@ -32,8 +32,23 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     Route::get('updateblog/{id}', [usertokencontroller::class, 'updateblog']);
-        Route::get('search', [usertokencontroller::class, 'search']);
+    Route::get('search', [usertokencontroller::class, 'search']);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Route::post('updateblog', [usertokencontroller::class, 'updateblog']);
 
 // Route::get('editblog', [usertokencontroller::class, 'editblog']);

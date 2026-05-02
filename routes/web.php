@@ -6,6 +6,8 @@ use App\Http\Controllers\bloglistcontroller;
 use App\Http\Controllers\editcontroller;
 use App\Http\Controllers\logincontroller;
 use App\Http\Controllers\loginmailcontroller;
+use App\Http\Controllers\fetchalluserdata;
+
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
 Route::get('loginapi', [logincontroller::class, 'loginapi']);
@@ -33,6 +35,7 @@ Route::get('edit/{id}', [bloglistcontroller::class, 'edit']);
 Route::put('edit/{id}', [bloglistcontroller::class, 'update']);
 Route::get('search', [bloglistcontroller::class, 'search']);
 
+Route::get('datalist', [fetchalluserdata::class, 'datalist']);
 
 // Route::get('welcome', function () {
 //     return view('welcome');
