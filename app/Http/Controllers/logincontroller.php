@@ -22,27 +22,32 @@ class logincontroller extends Controller
             'password' => 'required',
         ]);
 
-        login::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
 
         $user = login::where('email', $request->email)->first();
 
+        if ($user) {
 
-        if ($user && Hash::check($request->password, $user->password)) {
-
-
-            Auth::login($user);
+            if (Hash::check($request->password, $user->password)) {
 
 
-            $request->session()->regenerate();
+                Auth::login($user);
 
-            Mail::to($request->email)->send(new loginmail("You are Login", "You are login in blog management system"));
-            return redirect('welcome')->with('error', 'Invalid email or password');
+
+                $request->session()->regenerate();
+
+                Mail::to($request->email)->send(new loginmail("You are Login", "You are login in blog management system"));
+                return redirect('welcome')->with('success', 'Login');
+            } else {
+                return redirect('login')->with('error', 'Invalid email or password');
+            }
         } else {
-            return redirect('login')->with('error', 'Invalid email or password');
+            $newuser = login::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+            Auth::login($newuser);
+            return redirect('welcome')->with('success', 'Login');
         }
     }
 }
