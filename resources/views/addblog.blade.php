@@ -21,7 +21,7 @@
 <h1>
     Blog Management
 </h1>
-<form method="post" action="bloglist">
+<form method="post" action="bloglist" enctype="multipart/form-data">
 @csrf
     <label>Title</label>
     <input type="text" name="title"><br><br> 
@@ -29,6 +29,9 @@
       <label>Description</label>
     <textarea type="text" name="description"></textarea><br><br> 
     
+    <label>Upload Image</label><br>
+    <button>Upload Image</button>
+
 <button type="submit" name="btn" class="btn btn-primary">Add</button>
 </form>
 </body>

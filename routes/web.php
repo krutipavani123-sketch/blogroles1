@@ -8,6 +8,7 @@ use App\Http\Controllers\logincontroller;
 use App\Http\Controllers\loginmailcontroller;
 use App\Http\Controllers\fetchalluserdata;
 use App\Http\Controllers\relationcontroller;
+use App\Http\Controllers\imgcontroller;
 
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
@@ -41,6 +42,11 @@ Route::post('addblog', [bloglistcontroller::class, 'addblog']);
 Route::get('onelist', [relationcontroller::class, 'onelist']);
 Route::get('manylist', [relationcontroller::class, 'manylist']);
 Route::get('manytoone', [relationcontroller::class, 'manytoone']);
+
+//Route::view('upload', 'imgview');
+//Route::post('upload', [imgcontroller::class, 'img']);
+
+//Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
 
 //Route::view('/', 'register');
 //  Route::view('welcome','welcome');

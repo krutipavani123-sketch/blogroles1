@@ -93,9 +93,20 @@ h1{
     </div>
   </div>
 </nav>
-    <div>
-        @section('main')
+
+    <div class="container">
+
+    <div class="upload-card">
+        <div class="mt-3">
+          @section('main')
         @show
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+
     </div>
    
 </body>
