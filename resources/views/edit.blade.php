@@ -8,9 +8,12 @@
       @csrf
         <input type="hidden" name="_method" value="put">
 <div class="main">
+
    <h1>Update Data</h1>
+
     <label>Title</label><br>
     <input type="text" name="title" value="{{ $data->title }}"><br><br>
+
     <label>Description</label><br>
     <input type="text" name="description" value="{{ $data->description }}"><br><br>
 
@@ -19,6 +22,7 @@
     @if(!empty($data->image))
     <img src="{{ asset('storage/' . $data->image) }}" width="100"><br><br>
     @endif
+    
 <button name="btn">Update</button>
 
 

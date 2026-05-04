@@ -23,6 +23,6 @@ class blog extends Model
 
     function manytoone()
     {
-        return $this->belongsTo('App\Models\login', 'user_id');
+        return $this->belongsTo('App\Models\login', 'login_id');
     }
 }

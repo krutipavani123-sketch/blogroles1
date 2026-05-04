@@ -11,6 +11,8 @@ use App\Models\login;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use App\Models\image;
 
 class usertokencontroller extends Controller
 {
@@ -56,7 +58,8 @@ class usertokencontroller extends Controller
 
     function bloglist(Request $request)
     {
-        $data = blog::all();
+        return blog::with('manytoone')->get();
+        //$data = blog::all();
         return response()->json([
             'success' => true,
             'data' => $data
@@ -118,6 +121,13 @@ class usertokencontroller extends Controller
         $data = blog::find($id);
         $data->title = $request->title;
         $data->description = $request->description;
+        if ($request->hasFile('image')) {
+            if ($data->image) {
+                storage::disk('public')->delete($data->image);
+            }
+            $path = $request->file('image')->store('images', 'public');
+            $data->image = $path;
+        }
         $data->save();
         if ($data) {
             return response()->json([

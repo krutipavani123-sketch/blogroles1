@@ -49,9 +49,7 @@ class bloglistcontroller extends Controller
     function delete($id)
     {
         $data = blog::find($id);
-        if (!$data) {
-            return "Data Not Deleted";
-        }
+
         if ($data->image) {
             Storage::disk('public')->delete($data->image);
         }
