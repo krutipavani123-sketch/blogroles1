@@ -16,9 +16,11 @@
 
     <table  border="1" class="table table-bordered table-sm">
         <tr >
-            <td>id</td>
+            <td data-field="id" data="sortable=true">id</td>
             <td>Title</td>
             <td>Description</td>
+            <td>isFeatured</td>
+            <td>Image</td>
        
         </tr>
     
@@ -28,6 +30,13 @@
             <td>{{ $datas->id }}</td>
             <td>{{ $datas->title }}</td>
             <td>{{ $datas->description }}</td>
+            <td>@if( $datas->isfeatured==1 )
+                yes
+                @else
+                no
+                @endif
+            </td>
+            <td><img src="{{ asset('storage/' . $datas->image) }}" width="100"></td>
             
         </tr>
           @endforeach

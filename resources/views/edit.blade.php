@@ -11,6 +11,10 @@
 
    <h1>Update Data</h1>
 
+   <label>
+    <input type="checkbox" name="isfeatured" value="1"> Feature Blog
+</label><br>
+
     <label>Title</label><br>
     <input type="text" name="title" value="{{ $data->title }}"><br><br>
 

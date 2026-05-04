@@ -58,7 +58,7 @@ class usertokencontroller extends Controller
 
     function bloglist(Request $request)
     {
-        return blog::with('manytoone')->get();
+        $data = blog::with('manytoone')->get();
         //$data = blog::all();
         return response()->json([
             'success' => true,

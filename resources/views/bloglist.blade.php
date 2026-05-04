@@ -31,7 +31,12 @@
             <td>{{ $datas->id }}</td>
             <td>{{ $datas->title }}</td>
             <td>{{ $datas->description }}</td>
-            <td>{{ $datas->isfeatured }}</td>
+            <td>@if( $datas->isfeatured==1 )
+                yes
+                @else
+                no
+                @endif
+            </td>
             <td><img src="{{ asset('storage/' . $datas->image) }}" width="100"></td>
             <td>
                 <a href="{{ 'delete/'.$datas->id }}"><i class="bi bi-trash2-fill"></i></a>

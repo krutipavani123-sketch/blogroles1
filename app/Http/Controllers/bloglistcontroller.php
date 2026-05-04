@@ -25,7 +25,7 @@ class bloglistcontroller extends Controller
         ]);
         $path = $request->file('image')->store('images', 'public');
         $data = new blog;
-        //$data->isfeatured = $request->isfeatured;
+        $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
         $data->title = $request->title;
         $data->description = $request->description;
         $data->image = $path;
@@ -73,7 +73,7 @@ class bloglistcontroller extends Controller
         $data = blog::find($id);
         $data->title = $request->title;
         $data->description = $request->description;
-
+        $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
         if ($request->hasFile('image')) {
             if ($data->image) {
                 storage::disk('public')->delete($data->image);
