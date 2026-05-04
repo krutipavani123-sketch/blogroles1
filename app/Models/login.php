@@ -29,4 +29,14 @@ class login extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    function blogdata()
+    {
+        return $this->hasOne('App\Models\blog', 'user_id');
+    }
+
+    function manylist()
+    {
+        return $this->hasMany('App\Models\blog', 'user_id');
+    }
 }
