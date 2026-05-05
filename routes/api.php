@@ -36,7 +36,7 @@
         Route::get('search', [usertokencontroller::class, 'search']);
         Route::get('filter', [usertokencontroller::class, 'filter']);
 
-        //    Route::get('sort', [usertokencontroller::class, 'sort']);
+        Route::get('sort', [usertokencontroller::class, 'sort']);
     });
 
 

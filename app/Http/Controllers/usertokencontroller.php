@@ -156,14 +156,13 @@ class usertokencontroller extends Controller
     public function search(Request $request)
     {
         $search = $request->search ?? '';
-        $sort = $request->sort ?? 'id';
-        $order = $request->order ?? 'asc';
+
 
         $data = blog::with('manytoone')->where(function ($q) use ($search) {
             $q->where('title', 'like', "%$search%")->orwhere("description", "like", "%$search%");
         })->orWhereHas('manytoone', function ($q) use ($search) {
             $q->where('name', 'like', "$search%")->orWhere('email', 'like', "%$search%");
-        })->orderBy($sort, $order)
+        })
             ->paginate(10);
 
         return response()->json([
@@ -171,7 +170,49 @@ class usertokencontroller extends Controller
             "data" => $data
         ]);
     }
+
+    public function sort(Request $request)
+    {
+        $sort = $request->sort ?? 'id';
+        $order = $request->order ?? 'asc';
+        $data = blog::orderBy($sort, $order)->get();
+
+        return response()->json([
+            "success" => true,
+            "data" => $data
+        ]);
+    }
 }
+
+
+//    http://127.0.0.1:8000/api/search?search=kruti
+//      http://127.0.0.1:8000/api/filter?isfeatured=no
+//   http://127.0.0.1:8000/api/sort?sort=title&order=desc
+
+
+
+
+
+
+// public function search(Request $request)
+//     {
+//         $search = $request->search ?? '';
+//         $sort = $request->sort ?? 'id';
+//         $order = $request->order ?? 'asc';
+
+//         $data = blog::with('manytoone')->where(function ($q) use ($search) {
+//             $q->where('title', 'like', "%$search%")->orwhere("description", "like", "%$search%");
+//         })->orWhereHas('manytoone', function ($q) use ($search) {
+//             $q->where('name', 'like', "$search%")->orWhere('email', 'like', "%$search%");
+//         })->orderBy($sort, $order)
+//             ->paginate(10);
+
+//         return response()->json([
+//             "success" => true,
+//             "data" => $data
+//         ]);
+//     }
+
     // public function search(Request $request)
     // {
     //     $search = $request->search ?? '';
