@@ -142,6 +142,17 @@ class usertokencontroller extends Controller
             ]);
         }
     }
+
+    function filter(Request $request)
+    {
+
+        if ($request->isfeatured == 'yes') {
+            $data = blog::where('isfeatured', 1)->get();
+        } else {
+            $data = blog::where('isfeatured', 0)->get();
+        }
+        return response()->json($data);
+    }
     public function search(Request $request)
     {
         $search = $request->search ?? '';
@@ -154,6 +165,7 @@ class usertokencontroller extends Controller
             $q->where('name', 'like', "$search%")->orWhere('email', 'like', "%$search%");
         })->orderBy($sort, $order)
             ->paginate(10);
+
         return response()->json([
             "success" => true,
             "data" => $data
