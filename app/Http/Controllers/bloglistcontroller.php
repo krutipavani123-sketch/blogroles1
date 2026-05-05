@@ -43,7 +43,7 @@ class bloglistcontroller extends Controller
 
     function list()
     {
-        $data = Blog::where('login_id', auth()->id())->paginate(4);
+        $data = Blog::where('login_id', auth()->id())->paginate(10);
         return view("bloglist", ["data" => $data]);
     }
 
@@ -94,7 +94,7 @@ class bloglistcontroller extends Controller
         $data = blog::where(function ($query) use ($search) {
             $query->where('title', 'like', "%$search%")
                 ->orWhere('description', 'like', "%$search%");
-        })->paginate(4);    
+        })->paginate(10);
 
         return view("bloglist", [
             "data" => $data,

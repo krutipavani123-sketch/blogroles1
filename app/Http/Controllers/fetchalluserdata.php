@@ -9,7 +9,7 @@ class fetchalluserdata extends Controller
 {
     function datalist()
     {
-        $data = blog::paginate(5);
+        $data = blog::paginate(10);
         return view("fetchalluserdata", ["data" => $data]);
     }
 }

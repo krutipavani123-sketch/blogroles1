@@ -145,12 +145,15 @@ class usertokencontroller extends Controller
     public function search(Request $request)
     {
         $search = $request->search ?? '';
+        $sort = $request->sort ?? 'id';
+        $order = $request->order ?? 'asc';
 
         $data = blog::with('manytoone')->where(function ($q) use ($search) {
-            $q->where('title', 'like', "%search%")->orwhere("description", "like", "%$search%");
+            $q->where('title', 'like', "%$search%")->orwhere("description", "like", "%$search%");
         })->orWhereHas('manytoone', function ($q) use ($search) {
             $q->where('name', 'like', "$search%")->orWhere('email', 'like', "%$search%");
-        })->paginate(4);
+        })->orderBy($sort, $order)
+            ->paginate(10);
         return response()->json([
             "success" => true,
             "data" => $data

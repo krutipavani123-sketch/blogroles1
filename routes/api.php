@@ -16,7 +16,7 @@
 
     Route::get('user/{id}', [apicontroller::class, 'singleuser']);
 
-        Route::get('search', [usertokencontroller::class, 'search']);
+    //  Route::get('search', [usertokencontroller::class, 'search']);
 
     Route::post('register', [usertokencontroller::class, 'register']);
     Route::post('login', [usertokencontroller::class, 'loginapi']);
@@ -33,7 +33,8 @@
 
 
         Route::get('updateblog/{id}', [usertokencontroller::class, 'updateblog']);
-        //Route::get('search', [usertokencontroller::class, 'search']);
+        Route::get('search', [usertokencontroller::class, 'search']);
+    //    Route::get('sort', [usertokencontroller::class, 'sort']);
     });
 
 
