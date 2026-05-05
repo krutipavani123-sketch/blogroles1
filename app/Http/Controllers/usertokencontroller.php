@@ -144,24 +144,40 @@ class usertokencontroller extends Controller
     }
     public function search(Request $request)
     {
-        $search = $request->search;
+        $search = $request->search ?? '';
 
-        $data = blog::where('title', 'like', '%' . $search . '%')->get();
-
-
-        if (!$data->isEmpty()) {
-            return response()->json([
-                "success" => true,
-                "data" => $data
-            ]);
-        } else {
-            return response()->json([
-                "success" => false,
-                'msg' => 'No such Data'
-            ]);
-        }
+        $data = blog::with('manytoone')->where(function ($q) use ($search) {
+            $q->where('title', 'like', "%search%")->orwhere("description", "like", "%$search%");
+        })->orWhereHas('manytoone', function ($q) use ($search) {
+            $q->where('name', 'like', "$search%")->orWhere('email', 'like', "%$search%");
+        })->paginate(4);
+        return response()->json([
+            "success" => true,
+            "data" => $data
+        ]);
     }
 }
+    // public function search(Request $request)
+    // {
+    //     $search = $request->search ?? '';
+
+    //     $data = blog::with('manytoone')
+    //         ->where(function ($q) use ($search) {
+    //             $q->where('title', 'like', "%$search%")
+    //                 ->orWhere('description', 'like', "%$search%");
+    //         })
+    //         ->orWhereHas('manytoone', function ($q) use ($search) {
+    //             $q->where('name', 'like', "%$search%")
+    //                 ->orWhere('email', 'like', "%$search%");
+    //         })
+    //         ->paginate(4);
+
+    //     return response()->json([
+    //         "success" => true,
+    //         "data" => $data
+    //     ]);
+    // }
+
 
 // function search(Request $request)
 //     {
@@ -203,6 +219,28 @@ class usertokencontroller extends Controller
 
         //     return ['success' => true, "result" => $success, "msg" => "user Login"];
         // }
+        //        $data = blog::where('title', 'like', '%' . $search . '%')->get();
 
 
-        // search , filter (latest blog , oldest blog ), img add , show user name ,featured blog author decide (create edit ), only featured get flag 
+//  public function search(Request $request)
+//     {
+//         $search = $request->search;
+
+//         $data = blog::where('title', 'like', '%' . $search . '%')->get();
+
+
+//         if (!$data->isEmpty()) {
+//             return response()->json([
+//                 "success" => true,
+//                 "data" => $data
+//             ]);
+//         } else {
+//             return response()->json([
+//                 "success" => false,
+//                 'msg' => 'No such Data'
+//             ]);
+//         }
+//     }
+        // , img add , show user name , only featured get flag 
+
+        //featured blog author decide (create edit ) ,search , filter (latest blog , oldest blog )

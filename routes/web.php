@@ -86,3 +86,7 @@ Route::get('search', [bloglistcontroller::class, 'search']);
 //Route::view('welcome', 'welcome');
 
 //Route::post('', [logincontroller::class, 'login']);*/
+
+Route::get('view-list', [bloglistcontroller::class, 'viewList']);
+Route::get('list-json', [bloglistcontroller::class, 'listJson']);
+//Route::get('view-list', [bloglistcontroller::class, 'getname']);

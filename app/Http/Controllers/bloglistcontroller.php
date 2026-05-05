@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use File;
+use Illuminate\Support\Facades\Validator;
 
 class bloglistcontroller extends Controller
 {
@@ -88,12 +89,91 @@ class bloglistcontroller extends Controller
 
     function search(Request $request)
     {
-        $data = blog::where('title', 'like', "%$request->search%")->paginate(4);
-        return view("bloglist", ["data" => $data, 'search' => $request->search]);
+        $search = $request->search;
+
+        $data = blog::where(function ($query) use ($search) {
+            $query->where('title', 'like', "%$search%")
+                ->orWhere('description', 'like', "%$search%");
+        })->paginate(4);    
+
+        return view("bloglist", [
+            "data" => $data,
+            "search" => $search
+        ]);
+    }
+
+    public function listJson(Request $request)
+    {
+
+        //        $path = $request->file('image')->store('images', 'public');
+
+        $validator = Validator::make($request->all(), [
+            "offset" => 'required|string',
+            'limit' => 'string',
+        ]);
+        $data = DB::table('blogs')
+            ->join('logins', 'blogs.login_id', '=', 'logins.id')
+            ->select('blogs.*', 'logins.name');
+
+
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed']);
+        }
+        //  $data = blog::limit($request->limit)->offset($request->offset);
+
+
+
+        if (!empty($request->search)) {
+            $data = $data->where('title', 'like', "%$request->search%")->orwhere('description', 'like', "%$request->search%");
+        }
+
+
+        if (!empty($request->sort) && !empty($request->order)) {
+            $data = $data->orderBy($request->sort, $request->order);
+        }
+
+        if (!empty($request->is_featured)) {
+            $data = $data->where('isFeatured', $request->is_featured);
+        }
+        $count = $data->count();
+        $data = $data->get();
+
+
+
+        $response = [
+            'total' => $count,
+            'rows' => $data
+        ];
+        return response()->json($response);
+    }
+
+    public function viewList()
+    {
+        return view('bt-table');
     }
 }
+//         public function getname()
+//         {
+//             $data = DB::table('blogs')
+//                 ->join('logins', 'blogs.login_id', '=', 'logins.id')
+//                 ->select('logins.name')
+//                 ->get();
+
+//             return $data;
+//         }
+// }
 
 
+
+
+
+
+    // function search(Request $request)
+    // {
+    //     $data = blog::where('title', 'like', "%$request->search%")->paginate(4);
+    //     return view("bloglist", ["data" => $data, 'search' => $request->search]);
+    // }
 // function list()
 //     {
 //         if (auth()->check()) {

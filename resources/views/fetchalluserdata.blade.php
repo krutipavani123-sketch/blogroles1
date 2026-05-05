@@ -2,84 +2,78 @@
 @section('title', 'Blog List')
 
 @section('main')
+
 <h1>Blog List</h1>
 
 <form method="get" action="search">
-    <div text-align="right">
-        <input type="text" placeholder="serach with name" name="search" value="{{ @$search }}">
-        <button>Search</button><br><br>
+    <div class="text-end mb-3">
+        <input type="text" placeholder="search with name" name="search" value="{{ $search ?? '' }}">
+        <button class="btn btn-primary btn-sm">Search</button>
     </div>
-        
+</form>
 
-    </form>
+<a href="{{ url('add-blog') }}" class="btn btn-info mb-3 text-white">
+    Add Blog
+</a>
 
+<div class="table-responsive">
+    <table class="table table-bordered table-sm mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Featured</th>
+                <th>Image</th>
+               
+            </tr>
+        </thead>
 
-    <table  border="1" class="table table-bordered table-sm">
-        <tr >
-            <td data-field="id" data="sortable=true">id</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>isFeatured</td>
-            <td>Image</td>
-       
-        </tr>
-    
-    @foreach($data as  $datas)
-   
-        <tr>
-            <td>{{ $datas->id }}</td>
-            <td>{{ $datas->title }}</td>
-            <td>{{ $datas->description }}</td>
-            <td>@if( $datas->isfeatured==1 )
-                yes
-                @else
-                no
-                @endif
-            </td>
-            <td><img src="{{ asset('storage/' . $datas->image) }}" width="100"></td>
-            
-        </tr>
-          @endforeach
+        <tbody>
+            @forelse($data as $datas)
+            <tr>
+                <td>{{ $datas->id }}</td>
+                <td>{{ $datas->title }}</td>
+                <td>{{ $datas->description }}</td>
+
+                <td>
+                    @if($datas->isfeatured == 1)
+                        <span class="text-success">
+                            <i class="bi bi-star-fill"></i> Yes
+                        </span>
+                    @else
+                        <span class="text-danger">
+                            <i class="bi bi-star-fill"></i> No
+                        </span>
+                    @endif
+                </td>
+
+                <td>
+                    <img src="{{ asset('storage/' . $datas->image) }}" width="80">
+                </td>
+
+                
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="text-center">No data found</td>
+            </tr>
+            @endforelse
+        </tbody>
     </table>
-    <div>
-   {{ $data->links() }}
-    </div>
- 
-    @endsection
-    
+</div>
 
-    <style>
+<!-- Bootstrap pagination aligned right -->
+<div class="d-flex justify-content-end mt-3">
+    {{ $data->withQueryString()->links() }}
+</div>
 
-        .w-5.h-5 {
-            width: 20px;
-            margin-left: auto; 
-            margin-right: 0;
-  }
-    </style>
-{{-- <div>
-    <h1>Blog List</h1>
+@endsection
+<style>
 
-    <table border="1">
-        <tr>
-            <td>id</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Action</td>
-        </tr>
-    
-    @foreach($data as  $datas)
-   
-        <tr>
-            <td>{{ $datas->id }}</td>
-            <td>{{ $datas->title }}</td>
-            <td>{{ $datas->description }}</td>
-            <td>
-                <a href="{{ 'delete/'.$datas->id }}">Delete</a>
-                <a href="{{ 'edit/'.$datas->id }}">Update</a>
-            </td>
-        </tr>
-          @endforeach
-    </table>
-  
-    <!-- Live as if you were to die tomorrow. Learn as if you were to live forever. - Mahatma Gandhi -->
-</div> --}}
+            .w-5.h-5 {
+                width: 20px;
+                margin-left: auto; 
+                margin-right: 0;
+    }   
+        </style>

@@ -2,88 +2,83 @@
 @section('title', 'Blog List')
 
 @section('main')
+
 <h1>Blog List</h1>
 
 <form method="get" action="search">
-    <div text-align="right">
-        <input type="text" placeholder="serach with name" name="search" value="{{ @$search }}">
-        <button>Search</button><br><br>
+    <div class="text-end mb-3">
+        <input type="text" placeholder="search with name" name="search" value="{{ $search ?? '' }}">
+        <button class="btn btn-primary btn-sm">Search</button>
     </div>
-        
+</form>
 
-    </form>
-<a href="{{ url('add-blog') }}" class="btn btn-info" style="margin-bottom: 20px; color: white; text-decoration: none;">Add Blog</a>
+<a href="{{ url('add-blog') }}" class="btn btn-info mb-3 text-white">
+    Add Blog
+</a>
 
+    <table class="table table-bordered table-sm mb-0" data-toggle="table">
+        <thead>
+            <tr>
+                <th data-field="id" data-sortable="true">ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Featured</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-    <table  border="1" class="table table-bordered table-sm">
-        <tr >
-            <td data-field="id" data="sortable=true">id</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>isFeatured</td>
-            <td>Image</td>
-            <td>Action</td>
-        </tr>
-    
-    @foreach($data as  $datas)
-   
-        <tr>
-            <td>{{ $datas->id }}</td>
-            <td>{{ $datas->title }}</td>
-            <td>{{ $datas->description }}</td>
-            <td>@if( $datas->isfeatured==1 )
-                yes
-                @else
-                no
-                @endif
-            </td>
-            <td><img src="{{ asset('storage/' . $datas->image) }}" width="100"></td>
-            <td>
-                <a href="{{ 'delete/'.$datas->id }}"><i class="bi bi-trash2-fill"></i></a>
-                <a href="{{ 'edit/'.$datas->id }}"><i class="bi bi-pencil-square"></i></a>
-            </td>
-        </tr>
-          @endforeach
-    </table>
-    <div>
-   {{ $data->links() }}
-    </div>
- 
-    @endsection
-    
+        <tbody>
+            @forelse($data as $datas)
+            <tr>
+                <td>{{ $datas->id }}</td>
+                <td>{{ $datas->title }}</td>
+                <td>{{ $datas->description }}</td>
 
-    <style>
+                <td>
+                    @if($datas->isfeatured == 1)
+                        <span class="text-success">
+                            <i class="bi bi-star-fill"></i> Yes
+                        </span>
+                    @else
+                        <span class="text-danger">
+                            <i class="bi bi-star-fill"></i> No
+                        </span>
+                    @endif
+                </td>
 
-        .w-5.h-5 {
-            width: 20px;
-            margin-left: auto; 
-            margin-right: 0;
-  }
-    </style>
-{{-- <div>
-    <h1>Blog List</h1>
+                <td>
+                    <img src="{{ asset('storage/' . $datas->image) }}" width="80">
+                </td>
 
-    <table border="1">
-        <tr>
-            <td>id</td>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Action</td>
-        </tr>
-    
-    @foreach($data as  $datas)
-   
-        <tr>
-            <td>{{ $datas->id }}</td>
-            <td>{{ $datas->title }}</td>
-            <td>{{ $datas->description }}</td>
-            <td>
-                <a href="{{ 'delete/'.$datas->id }}">Delete</a>
-                <a href="{{ 'edit/'.$datas->id }}">Update</a>
-            </td>
-        </tr>
-          @endforeach
-    </table>
-  
-    <!-- Live as if you were to die tomorrow. Learn as if you were to live forever. - Mahatma Gandhi -->
-</div> --}}
+                <td>
+                    <a href="{{ url('delete/'.$datas->id) }}" class="text-danger me-2">
+                        <i class="bi bi-trash2-fill"></i>
+                    </a>
+                    <a href="{{ url('edit/'.$datas->id) }}" class="text-primary">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="text-center">No data found</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>z
+
+<!-- Bootstrap pagination aligned right -->
+<div class="d-flex justify-content-end mt-3">
+    {{ $data->withQueryString()->links() }}
+</div>
+
+@endsection
+<style>
+
+            .w-5.h-5 {
+                width: 20px;
+                margin-left: auto; 
+                margin-right: 0;
+    }   
+        </style>
