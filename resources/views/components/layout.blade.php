@@ -75,8 +75,20 @@
                 <li class="nav-item">
                     <a class="nav-link" href="datalist">All Blogs</a>
                 </li>
+                 </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('profile') }}">
+                        <i class="bi bi-person-circle fs-5"></i>
+                    </a>
+                </li>
+
+             <a class="nav-link" href="{{ url('logout') }}">
+    <i class="bi bi-box-arrow-right"></i>
+</a>
             </ul>
+           
 
         </div>
     </div>

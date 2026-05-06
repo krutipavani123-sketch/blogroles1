@@ -9,6 +9,9 @@ use App\Http\Controllers\loginmailcontroller;
 use App\Http\Controllers\fetchalluserdata;
 use App\Http\Controllers\relationcontroller;
 use App\Http\Controllers\imgcontroller;
+use App\Http\Controllers\profilecontroller;
+use App\Http\Controllers\logoutcontroller;
+
 
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
@@ -19,6 +22,10 @@ Route::get('welcome', [bloglistcontroller::class, 'list']);
 Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
 
 Route::view('login', 'login');
+
+Route::get('profile', [profilecontroller::class, 'profile']);
+Route::get('logout', [logoutcontroller::class, 'logout']);
+
 
 Route::post('login', [logincontroller::class, 'login']);
 Route::get('welcome', [bloglistcontroller::class, 'list']);
