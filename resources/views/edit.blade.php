@@ -8,10 +8,18 @@
 
         <h4 class="app-title text-center">Edit Blog</h4>
 
-        <form action="/edit/{{ $data->id }}" method="POST" enctype="multipart/form-data">
+       <form action="{{ url('update/'.$data->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
+             <div class="form-check mb-3">
+                        <input type="checkbox" name="isfeatured" class="form-check-input" id="featured">
+                        <label class="form-check-label" for="featured">
+                            Featured
+                        </label>
+                    </div>
+
+                    
             <div class="mb-3">
                 <label>Title</label>
                 <input type="text" name="title" value="{{ $data->title }}" class="form-control">

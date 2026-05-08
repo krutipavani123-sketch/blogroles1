@@ -69,18 +69,18 @@
                     <a class="nav-link" href="{{ url('list') }}">Home</a>
                 </li>
 
-                @hasrole('admin')
+    @can('create task')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('add-blog') }}">Add Blog</a>
                 </li>
-                @endhasrole
+    @endcan
 
-                @hasrole('admin')
+@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage roles'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('roles/list') }}">Roles</a>
                 </li>
-                @endhasrole
-
+               
+@endif
             </ul>
 
             <!-- Right Side Icons -->

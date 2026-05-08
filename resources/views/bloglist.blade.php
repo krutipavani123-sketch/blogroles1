@@ -94,11 +94,11 @@
     </form>
 
 
-    @if(auth()->user()->hasRole('admin'))
+    @can('create task')
         <a href="{{ url('add-blog') }}" class="btn btn-info text-white btn-add mb-3">
             + Add Blog
         </a>
-    @endif
+    @endcan
 
   
     <div class="table-card">
@@ -112,9 +112,9 @@
                     <th>Description</th>
                     <th>Featured</th>
                     <th>Image</th>
-                    @hasrole('admin')
+                   @if(auth()->user()->can('update task')||auth()->user()->can('delete task'))
                     <th>Action</th>
-                    @endhasrole
+                    @endif
                 </tr>
             </thead>
 
@@ -139,16 +139,21 @@
                     </td>
 
                     <td>
-                        @hasrole('admin')
+
+@can('delete task')
+
                         <a href="{{ url('delete/'.$datas->id) }}" class="text-danger me-2">
                             <i class="bi bi-trash2-fill"></i>
                         </a>
-
+ @endcan
+@can('update task')
                         <a href="{{ url('edit/'.$datas->id) }}" class="text-primary">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        @endhasrole
+ @endcan
+
                     </td>
+
                 </tr>
                 @empty
                 <tr>

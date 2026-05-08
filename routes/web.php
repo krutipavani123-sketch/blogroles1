@@ -17,26 +17,41 @@ use Spatie\Permission\Models\Role;
 
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
+
+
+Route::middleware('auth')->get('debug-user', function () {
+    return [
+        'user' => auth()->user(),
+        'roles' => auth()->user()->roles,
+        'direct_permissions' => auth()->user()->permissions,
+        'all_permissions' => auth()->user()->getAllPermissions(),
+    ];
+});
+
+
+
 Route::middleware(['auth'])->group(function () {
 
-    // 👀 ALL USERS
     Route::get('list', [bloglistcontroller::class, 'list']);
     Route::get('welcome', [bloglistcontroller::class, 'list']);
+
     Route::get('profile', [profilecontroller::class, 'profile']);
     Route::get('logout', [logoutcontroller::class, 'logout']);
 
-    // 🔴 ADMIN ONLY
-    Route::middleware(['role:admin'])->group(function () {
-
-        Route::get('add-blog', fn() => view('addblog'));
-        Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
-
+    Route::middleware(['permission:update task'])->group(function () {
         Route::get('edit/{id}', [bloglistcontroller::class, 'edit']);
-        Route::put('edit/{id}', [bloglistcontroller::class, 'update']);
+        Route::put('update/{id}', [bloglistcontroller::class, 'update']);
+    });
+
+    Route::middleware(['permission:delete task'])->group(function () {
         Route::get('delete/{id}', [bloglistcontroller::class, 'delete']);
     });
-});
 
+    Route::middleware(['permission:create task'])->group(function () {
+        Route::get('add-blog', fn() => view('addblog'));
+        Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
+    });
+});
 Route::get('roles/create', [rolecontroller::class, 'create'])->name('roles.create');
 Route::post('roles/store', [rolecontroller::class, 'store'])->name('roles.store');
 Route::get('roles/list', [rolecontroller::class, 'list'])->name('roles.list');

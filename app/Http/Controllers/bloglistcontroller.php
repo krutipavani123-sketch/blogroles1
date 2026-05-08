@@ -47,20 +47,17 @@ class bloglistcontroller extends Controller
         return view("bloglist", ["data" => $data]);
     }
 
-    // function list()
-    // {
-    //     if (auth()->user()?->hasRole('admin')) {
-    //         $data = blog::paginate(5);
-    //     } else {
-    //         $data = blog::where('user_id', auth()->id())->paginate(5);
-    //     }
+  
 
-    //     return view("bloglist", ["data" => $data]);
-    // }
     private function canModify($blog)
     {
-        return auth()->check() &&
-            (auth()->user()->hasRole('admin') || $blog->user_id == auth()->id());
+        $user = auth()->user();
+
+        return $user && (
+            $user->hasRole('admin') ||
+            $user->can('update task') ||
+            $user->can('delete task')
+        );
     }
 
     function delete($id)
@@ -89,7 +86,6 @@ class bloglistcontroller extends Controller
 
         return abort(403);
     }
-
 
 
 
@@ -268,4 +264,27 @@ class bloglistcontroller extends Controller
     //     } else {
     //         return "Data not Deleted";
     //     }
+    // }
+
+
+
+
+
+
+
+
+      // function list()
+    // {
+    //     if (auth()->user()?->hasRole('admin')) {
+    //         $data = blog::paginate(5);
+    //     } else {
+    //         $data = blog::where('user_id', auth()->id())->paginate(5);
+    //     }
+
+    //     return view("bloglist", ["data" => $data]);
+    // }
+    // private function canModify($blog)
+    // {
+    //     return auth()->check() &&
+    //         (auth()->user()->hasRole('admin') || $blog->user_id == auth()->id());
     // }
