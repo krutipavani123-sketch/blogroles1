@@ -6,7 +6,7 @@
 <div class="app-card">
 
     <div class="d-flex justify-content-between mb-3">
-        <h4>Roles List</h4>
+        <h4>Users List</h4>
         <a href="{{ route('users.create') }}" class="btn btn-dark btn-sm">Create</a>
     </div>
 
