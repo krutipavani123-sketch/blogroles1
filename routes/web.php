@@ -14,6 +14,7 @@ use App\Http\Controllers\logoutcontroller;
 use App\Http\Controllers\rolecontroller;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\usercontroller;
 
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
@@ -64,7 +65,17 @@ Route::post('login', [logincontroller::class, 'login']);
 
 Route::get('loginapi', [logincontroller::class, 'loginapi']);
 
+Route::get('users/create', [usercontroller::class, 'create'])->name('users.create');
 
+Route::post('users/store', [rolecontroller::class, 'store'])->name('users.store');
+
+Route::get('users/list', [usercontroller::class, 'list'])->name('users.list');
+
+Route::get('users/edit/{id}', [usercontroller::class, 'edit'])->name('users.edit');
+
+Route::post('users/update/{id}', [usercontroller::class, 'update'])->name('users.update');
+
+Route::get('users/delete/{id}', [usercontroller::class, 'delete'])->name('users.delete');
 
 // Route::middleware(['auth', 'role:admin'])->group(function () {
 

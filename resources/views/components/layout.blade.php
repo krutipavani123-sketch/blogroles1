@@ -75,6 +75,13 @@
                 </li>
     @endcan
 
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('users.list') }}">Users</a>
+                </li>
+
+
 @if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage roles'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('roles/list') }}">Roles</a>
