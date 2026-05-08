@@ -7,7 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 
 class UserController extends Controller
@@ -22,7 +24,9 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('users.create'); // form page
+        $roles = Role::all(); // user ને assign કરવા roles લાવવાના છે
+        return view('users.create', compact('roles'));
+        // return view('users.create'); // form page
     }
 
     public function edit($id)
@@ -57,28 +61,35 @@ class UserController extends Controller
                 ->withErrors($validator);
         }
     }
+
+
+    public function store(Request $request)
+
+
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'email' => 'required|min:3|unique:users,email',
+            'password' => 'required',
+            'role' => 'nullable|array'
+
+        ]);
+
+        if ($validator->passes()) {
+            $roles = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+
+            ]);
+
+            $roles->syncRoles($request->role ?? []);
+            return redirect()->route('users.list')->with('success', 'User Added');
+        } else {
+            return redirect('create')->withInput()->withErrors($validator);
+        }
+    }
 }
-
-    // public function store(Request $request)
-
-
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required|unique:permissions|min:3',
-
-    //     ]);
-
-    //     if ($validator->passes()) {
-    //         Permission::create(['name' => $request->name]);
-
-
-    //         return redirect('list')->with('success', 'Permission Added');
-    //     } else {
-    //         return redirect('create')->withInput()->withErrors($validator);
-    //     }
-    // }
-
-
     // public function edit($id)
     // {
     //     $users = User::findOrFail($id);

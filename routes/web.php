@@ -19,18 +19,6 @@ use App\Http\Controllers\usercontroller;
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
 
-
-Route::middleware('auth')->get('debug-user', function () {
-    return [
-        'user' => auth()->user(),
-        'roles' => auth()->user()->roles,
-        'direct_permissions' => auth()->user()->permissions,
-        'all_permissions' => auth()->user()->getAllPermissions(),
-    ];
-});
-
-
-
 Route::middleware(['auth'])->group(function () {
 
     Route::get('list', [bloglistcontroller::class, 'list']);
@@ -67,13 +55,13 @@ Route::get('loginapi', [logincontroller::class, 'loginapi']);
 
 Route::get('users/create', [usercontroller::class, 'create'])->name('users.create');
 
-Route::post('users/store', [rolecontroller::class, 'store'])->name('users.store');
+Route::post('users/store', [usercontroller::class, 'store'])->name('users.store');
 
 Route::get('users/list', [usercontroller::class, 'list'])->name('users.list');
 
 Route::get('users/edit/{id}', [usercontroller::class, 'edit'])->name('users.edit');
 
-Route::post('users/update/{id}', [usercontroller::class, 'update'])->name('users.update');
+Route::put('users/update/{id}', [usercontroller::class, 'update'])->name('users.update');
 
 Route::get('users/delete/{id}', [usercontroller::class, 'delete'])->name('users.delete');
 

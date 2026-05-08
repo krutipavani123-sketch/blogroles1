@@ -24,20 +24,25 @@ class bloglistcontroller extends Controller
             'description' => 'required',
             'image' => 'required|image'
         ]);
-        $path = $request->file('image')->store('images', 'public');
-        $data = new blog;
-        $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
-        $data->title = $request->title;
-        $data->description = $request->description;
-        $data->image = $path;
-        $data->user_id = auth()->id();
-        $data->save();
 
-        if ($data) {
+        if ($this->canModify($data)) {
+            $path = $request->file('image')->store('images', 'public');
+            $data = new blog;
+            $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
+            $data->title = $request->title;
+            $data->description = $request->description;
+            $data->image = $path;
+            $data->user_id = auth()->id();
+            $data->save();
 
-            return redirect('welcome')->with('success', 'Blog added successfully!');
+            if ($data) {
+
+                return redirect('welcome')->with('success', 'Blog added successfully!');
+            } else {
+                return "Something went wrong";
+            }
         } else {
-            return "Something went wrong";
+            return abort(403);
         }
     }
 
@@ -47,7 +52,7 @@ class bloglistcontroller extends Controller
         return view("bloglist", ["data" => $data]);
     }
 
-  
+
 
     private function canModify($blog)
     {
@@ -56,7 +61,8 @@ class bloglistcontroller extends Controller
         return $user && (
             $user->hasRole('admin') ||
             $user->can('update task') ||
-            $user->can('delete task')
+            $user->can('delete task') ||
+            $user->can('create task')
         );
     }
 

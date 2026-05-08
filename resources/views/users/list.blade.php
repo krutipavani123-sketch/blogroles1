@@ -7,7 +7,7 @@
 
     <div class="d-flex justify-content-between mb-3">
         <h4>Roles List</h4>
-        <a href="{{ route('roles.create') }}" class="btn btn-dark btn-sm">Create</a>
+        <a href="{{ route('users.create') }}" class="btn btn-dark btn-sm">Create</a>
     </div>
 
     <table class="table table-bordered table-hover">

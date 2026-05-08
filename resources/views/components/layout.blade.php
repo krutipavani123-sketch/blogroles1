@@ -76,11 +76,11 @@
     @endcan
 
 
-
+@if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage users'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('users.list') }}">Users</a>
                 </li>
-
+@endif
 
 @if(auth()->user()?->hasRole('admin') || auth()->user()?->can('manage roles'))
                 <li class="nav-item">

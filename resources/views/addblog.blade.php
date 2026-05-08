@@ -4,7 +4,7 @@
 
 @section('main')
 
-@role('admin')
+@can('create task')
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
 
@@ -59,6 +59,6 @@
 
 </div>
 
-@endrole
+@endcan
 
 @endsection
