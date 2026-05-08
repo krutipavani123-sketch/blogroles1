@@ -11,30 +11,95 @@ use App\Http\Controllers\relationcontroller;
 use App\Http\Controllers\imgcontroller;
 use App\Http\Controllers\profilecontroller;
 use App\Http\Controllers\logoutcontroller;
-
+use App\Http\Controllers\rolecontroller;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 use PHPUnit\Metadata\RequiresPhpunitExtension;
 
+Route::middleware(['auth'])->group(function () {
+
+    // 👀 ALL USERS
+    Route::get('list', [bloglistcontroller::class, 'list']);
+    Route::get('welcome', [bloglistcontroller::class, 'list']);
+    Route::get('profile', [profilecontroller::class, 'profile']);
+    Route::get('logout', [logoutcontroller::class, 'logout']);
+
+    // 🔴 ADMIN ONLY
+    Route::middleware(['role:admin'])->group(function () {
+
+        Route::get('add-blog', fn() => view('addblog'));
+        Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
+
+        Route::get('edit/{id}', [bloglistcontroller::class, 'edit']);
+        Route::put('edit/{id}', [bloglistcontroller::class, 'update']);
+        Route::get('delete/{id}', [bloglistcontroller::class, 'delete']);
+    });
+});
+
+Route::get('roles/create', [rolecontroller::class, 'create'])->name('roles.create');
+Route::post('roles/store', [rolecontroller::class, 'store'])->name('roles.store');
+Route::get('roles/list', [rolecontroller::class, 'list'])->name('roles.list');
+Route::get('roles/edit/{id}', [rolecontroller::class, 'edit'])->name('roles.edit');
+Route::post('roles/update/{id}', [rolecontroller::class, 'update'])->name('roles.update');
+
+Route::get('roles/delete/{id}', [rolecontroller::class, 'delete'])->name('roles.delete');
+Route::view('login', 'login');
+Route::post('login', [logincontroller::class, 'login']);
+
 Route::get('loginapi', [logincontroller::class, 'loginapi']);
 
-Route::view('add-blog', 'welcome');
-Route::get('welcome', [bloglistcontroller::class, 'list']);
-Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
-
-Route::view('login', 'login');
-
-Route::get('profile', [profilecontroller::class, 'profile']);
-Route::get('logout', [logoutcontroller::class, 'logout']);
 
 
-Route::post('login', [logincontroller::class, 'login']);
-Route::get('welcome', [bloglistcontroller::class, 'list']);
+// Route::middleware(['auth', 'role:admin'])->group(function () {
 
-Route::get('delete/{id}', [bloglistcontroller::class, 'delete']);
+//     Route::get('add-blog', function () {
+//         return view('add-blog');
+//     });
+
+//     Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
+
+//     Route::get('delete/{id}', [bloglistcontroller::class, 'delete']);
+//     Route::get('edit/{id}', [bloglistcontroller::class, 'edit']);
+//     Route::put('edit/{id}', [bloglistcontroller::class, 'update']);
+// });
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('list', [bloglistcontroller::class, 'list']);
+// });
+
+
+// Route::middleware(['auth'])->group(function () {
+
+//     Route::get('welcome', [bloglistcontroller::class, 'list']);
+//     Route::get('profile', [profilecontroller::class, 'profile']);
+//     Route::get('logout', [logoutcontroller::class, 'logout']);
+// });
+
+
+// Route::view('login', 'login');
+// Route::post('login', [logincontroller::class, 'login']);
+
+// Route::get('loginapi', [logincontroller::class, 'loginapi']);
+
+
+//Route::get('welcome', [bloglistcontroller::class, 'list']);
+//Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
+
+//Route::view('login', 'login');
+
+//Route::get('profile', [profilecontroller::class, 'profile']);
+//Route::get('logout', [logoutcontroller::class, 'logout']);
+
+
+//Route::post('login', [logincontroller::class, 'login']);
+//Route::get('welcome', [bloglistcontroller::class, 'list']);
+
+//Route::get('delete/{id}', [bloglistcontroller::class, 'delete']);
 
 Route::get('list', [bloglistcontroller::class, 'list']);
-Route::get('edit/{id}', [bloglistcontroller::class, 'edit']);
-Route::put('edit/{id}', [bloglistcontroller::class, 'update']);
+//Route::get('edit/{id}', [bloglistcontroller::class, 'edit']);
+//Route::put('edit/{id}', [bloglistcontroller::class, 'update']);
 Route::get('search', [bloglistcontroller::class, 'search']);
 
 Route::get('datalist', [fetchalluserdata::class, 'datalist']);
@@ -43,8 +108,8 @@ Route::get('datalist', [fetchalluserdata::class, 'datalist']);
 Route::post('mail', [loginmailcontroller::class, 'loginmail']);
 Route::view('send-mail', 'sendmail');
 
-Route::get('addblog', [bloglistcontroller::class, 'addblog']);
-Route::post('addblog', [bloglistcontroller::class, 'addblog']);
+// Route::get('addblog', [bloglistcontroller::class, 'addblog']);
+// Route::post('addblog', [bloglistcontroller::class, 'addblog']);
 
 Route::get('onelist', [relationcontroller::class, 'onelist']);
 Route::get('manylist', [relationcontroller::class, 'manylist']);

@@ -30,7 +30,7 @@ class bloglistcontroller extends Controller
         $data->title = $request->title;
         $data->description = $request->description;
         $data->image = $path;
-        $data->login_id = auth()->id();
+        $data->user_id = auth()->id();
         $data->save();
 
         if ($data) {
@@ -43,27 +43,51 @@ class bloglistcontroller extends Controller
 
     function list()
     {
-        $data = Blog::where('login_id', auth()->id())->paginate(10);
+        $data = blog::paginate(5);
         return view("bloglist", ["data" => $data]);
+    }
+
+    // function list()
+    // {
+    //     if (auth()->user()?->hasRole('admin')) {
+    //         $data = blog::paginate(5);
+    //     } else {
+    //         $data = blog::where('user_id', auth()->id())->paginate(5);
+    //     }
+
+    //     return view("bloglist", ["data" => $data]);
+    // }
+    private function canModify($blog)
+    {
+        return auth()->check() &&
+            (auth()->user()->hasRole('admin') || $blog->user_id == auth()->id());
     }
 
     function delete($id)
     {
-        $data = blog::find($id);
+        $data = blog::findOrFail($id);
 
-        if ($data->image) {
-            Storage::disk('public')->delete($data->image);
+        if ($this->canModify($data)) {
+
+
+            if ($data->image) {
+                Storage::disk('public')->delete($data->image);
+            }
+            $data->delete();
+
+            return redirect("list")->with("success", "Data Deleted");
         }
-        $data->delete();
-
-        return redirect("list")->with("success", "Data Deleted");
+        return abort(403, 'unauthorized');
     }
-
 
     function edit($id)
     {
-        $data = blog::find($id);
-        return view('edit', ['data' => $data]);
+        $data = blog::findOrFail($id);
+        if ($this->canModify($data)) {
+            return view('edit', ['data' => $data]);
+        }
+
+        return abort(403);
     }
 
 
@@ -71,88 +95,93 @@ class bloglistcontroller extends Controller
 
     function update(Request $request, $id)
     {
-        $data = blog::find($id);
-        $data->title = $request->title;
-        $data->description = $request->description;
-        $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
-        if ($request->hasFile('image')) {
-            if ($data->image) {
-                storage::disk('public')->delete($data->image);
+        $data = blog::findOrFail($id);
+        if ($this->canModify($data)) {
+            $data->title = $request->title;
+            $data->description = $request->description;
+            $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
+            if ($request->hasFile('image')) {
+                if ($data->image) {
+                    storage::disk('public')->delete($data->image);
+                }
+                $path = $request->file('image')->store('images', 'public');
+                $data->image = $path;
             }
-            $path = $request->file('image')->store('images', 'public');
-            $data->image = $path;
+            $data->save();
+            return redirect('list');
         }
-        $data->save();
-        return redirect('list');
+        return abort(403);
     }
 
-
-    function search(Request $request)
+    public function search(Request $request)
     {
         $search = $request->search;
 
-        $data = blog::where(function ($query) use ($search) {
-            $query->where('title', 'like', "%$search%")
-                ->orWhere('description', 'like', "%$search%");
-        })->paginate(10);
+        $query = Blog::query();
 
-        return view("bloglist", [
-            "data" => $data,
-            "search" => $search
-        ]);
-    }
-
-    public function listJson(Request $request)
-    {
-
-        //        $path = $request->file('image')->store('images', 'public');
-
-        $validator = Validator::make($request->all(), [
-            "offset" => 'required|string',
-            'limit' => 'string',
-        ]);
-        $data = DB::table('blogs')
-            ->join('logins', 'blogs.login_id', '=', 'logins.id')
-            ->select('blogs.*', 'logins.name');
-
-
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Validation failed']);
-        }
-        //  $data = blog::limit($request->limit)->offset($request->offset);
-
-
-
-        if (!empty($request->search)) {
-            $data = $data->where('title', 'like', "%$request->search%")->orwhere('description', 'like', "%$request->search%");
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
         }
 
+        $data = $query->paginate(5);
 
-        if (!empty($request->sort) && !empty($request->order)) {
-            $data = $data->orderBy($request->sort, $request->order);
-        }
-
-        if (!empty($request->is_featured)) {
-            $data = $data->where('isFeatured', $request->is_featured);
-        }
-        $count = $data->count();
-        $data = $data->get();
-
-
-
-        $response = [
-            'total' => $count,
-            'rows' => $data
-        ];
-        return response()->json($response);
-    }
-
-    public function viewList()
-    {
-        return view('bt-table');
+        return view('bloglist', compact('data', 'search'));
     }
 }
+//     public function listJson(Request $request)
+//     {
+
+//         //        $path = $request->file('image')->store('images', 'public');
+
+//         $validator = Validator::make($request->all(), [
+//             "offset" => 'required|string',
+//             'limit' => 'string',
+//         ]);
+//         $data = DB::table('blogs')
+//             ->join('users', 'blogs.login_id', '=', 'users.id')
+//             ->select('blogs.*', 'users.name');
+
+
+
+//         if ($validator->fails()) {
+//             return response()->json(['message' => 'Validation failed']);
+//         }
+//         //  $data = blog::limit($request->limit)->offset($request->offset);
+
+
+
+//         if (!empty($request->search)) {
+//             $data = $data->where('title', 'like', "%$request->search%")->orwhere('description', 'like', "%$request->search%");
+//         }
+
+
+//         if (!empty($request->sort) && !empty($request->order)) {
+//             $data = $data->orderBy($request->sort, $request->order);
+//         }
+
+//         if (!empty($request->is_featured)) {
+//             $data = $data->where('isFeatured', $request->is_featured);
+//         }
+//         $count = $data->count();
+//         $data = $data->get();
+
+
+
+//         $response = [
+//             'total' => $count,
+//             'rows' => $data
+//         ];
+//         return response()->json($response);
+//     }
+
+//     public function viewList()
+//     {
+//         return view('bt-table');
+//     }
+// }
 //         public function getname()
 //         {
 //             $data = DB::table('blogs')

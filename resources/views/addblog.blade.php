@@ -1,43 +1,64 @@
-@extends('layout')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('components.layout')
 
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
+@section('title', 'Blog List')
 
+@section('main')
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.js"></script>
+@role('admin')
 
-    <title>Blog Management</title>
-</head>
-<body>
-    
-<h1>
-    Blog Management
-</h1>
-<form method="post" action="bloglist" enctype="multipart/form-data">
-@csrf
-    <label>Title</label>
-    <input type="text" name="title"><br><br> 
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
 
-      <label>Description</label>
-    <textarea type="text" name="description"></textarea><br><br> 
-    
-    <label>Upload Image</label><br>
-    <button>Upload Image</button>
+    <div class="col-md-5">
 
-<button type="submit" name="btn" class="btn btn-primary">Add</button>
-</form>
-</body>
-</html>
+        <div class="card shadow-lg border-0 rounded-4">
 
+            <div class="card-header bg-primary text-white text-center rounded-top-4">
+                <h4 class="mb-0">Add Blog</h4>
+            </div>
 
+            <div class="card-body p-4">
 
+                <form method="POST" action="{{ url('bloglist') }}" enctype="multipart/form-data">
+                    @csrf
 
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="isfeatured" class="form-check-input" id="featured">
+                        <label class="form-check-label" for="featured">
+                            Featured
+                        </label>
+                    </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+
+                
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload Image</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+
+          
+                    <button type="submit" class="btn btn-primary w-100">
+                        Add Blog
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endrole
+
+@endsection

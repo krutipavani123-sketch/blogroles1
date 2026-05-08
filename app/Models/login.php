@@ -6,10 +6,12 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 
 class login extends Authenticatable
 {
+     use HasRoles;
     use HasApiTokens;
     use Notifiable;
 

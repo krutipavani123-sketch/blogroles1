@@ -1,37 +1,41 @@
 @extends('components.layout')
-@section('title', 'Blog Update')
+@section('title', 'Edit Blog')
+
 @section('main')
 
-   
+<div class="d-flex justify-content-center">
+    <div class="col-md-6 app-card">
 
-<form action="/edit/{{ $data->id }}" method="post" enctype="multipart/form-data">
-      @csrf
-        <input type="hidden" name="_method" value="put">
-<div class="main">
+        <h4 class="app-title text-center">Edit Blog</h4>
 
-   <h1>Update Data</h1>
+        <form action="/edit/{{ $data->id }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-   <label>
-    <input type="checkbox" name="isfeatured" value="1"> Feature Blog
-</label><br>
+            <div class="mb-3">
+                <label>Title</label>
+                <input type="text" name="title" value="{{ $data->title }}" class="form-control">
+            </div>
 
-    <label>Title</label><br>
-    <input type="text" name="title" value="{{ $data->title }}"><br><br>
+            <div class="mb-3">
+                <label>Description</label>
+                <input type="text" name="description" value="{{ $data->description }}" class="form-control">
+            </div>
 
-    <label>Description</label><br>
-    <input type="text" name="description" value="{{ $data->description }}"><br><br>
+            <div class="mb-3">
+                <label>Image</label>
+                <input type="file" name="image" class="form-control">
 
-     <label>Upload Image</label> 
-    <input type="file" name="image" id="image">
-    @if(!empty($data->image))
-    <img src="{{ asset('storage/' . $data->image) }}" width="100"><br><br>
-    @endif
-    
-<button name="btn">Update</button>
+                @if($data->image)
+                    <img src="{{ asset('storage/'.$data->image) }}" width="100" class="mt-2">
+                @endif
+            </div>
 
+            <button class="btn btn-success w-100">Update</button>
 
-</form>
+        </form>
 
-    <!-- He who is contented is rich. - Laozi -->
+    </div>
 </div>
-      @endsection
+
+@endsection
