@@ -24,10 +24,10 @@ class bloglistcontroller extends Controller
             'description' => 'required',
             'image' => 'required|image'
         ]);
-
+        $data = new blog;
         if ($this->canModify($data)) {
             $path = $request->file('image')->store('images', 'public');
-            $data = new blog;
+
             $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
             $data->title = $request->title;
             $data->description = $request->description;

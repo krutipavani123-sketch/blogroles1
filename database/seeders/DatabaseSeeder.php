@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
         ]);
 
-        $admin->assignRole('admin'); // OK after guard fix
+        $admin->assignRole('admin');
 
         //  User::factory()->create([
         //     'name' => 'Test User',

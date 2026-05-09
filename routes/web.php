@@ -40,6 +40,27 @@ Route::middleware(['auth'])->group(function () {
         Route::get('add-blog', fn() => view('addblog'));
         Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
     });
+
+    // Route::middleware(['permission:manage users'])->group(function () {
+
+    //     Route::get('users/create', [usercontroller::class, 'create'])->name('users.create');
+    //     Route::post('users/store', [usercontroller::class, 'store'])->name('users.store');
+    //     Route::get('users/list', [usercontroller::class, 'list'])->name('users.list');
+    //     Route::get('users/edit/{id}', [usercontroller::class, 'edit'])->name('users.edit');
+    //     Route::put('users/update/{id}', [usercontroller::class, 'update'])->name('users.update');
+    //     Route::get('users/delete/{id}', [usercontroller::class, 'delete'])->name('users.delete');
+    // });
+
+
+    // Route::middleware(['permission:manage roles'])->group(function () {
+
+    //     Route::get('roles/create', [rolecontroller::class, 'create'])->name('roles.create');
+    //     Route::post('roles/store', [rolecontroller::class, 'store'])->name('roles.store');
+    //     Route::get('roles/list', [rolecontroller::class, 'list'])->name('roles.list');
+    //     Route::get('roles/edit/{id}', [rolecontroller::class, 'edit'])->name('roles.edit');
+    //     Route::post('roles/update/{id}', [rolecontroller::class, 'update'])->name('roles.update');
+    //     Route::get('roles/delete/{id}', [rolecontroller::class, 'delete'])->name('roles.delete');
+    // });
 });
 Route::get('roles/create', [rolecontroller::class, 'create'])->name('roles.create');
 Route::post('roles/store', [rolecontroller::class, 'store'])->name('roles.store');
