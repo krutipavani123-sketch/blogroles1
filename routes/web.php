@@ -15,14 +15,31 @@ use App\Http\Controllers\rolecontroller;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\usercontroller;
-
+use Fruitcake\LaravelDebugbar\Facades\Debugbar;
 use PHPUnit\Metadata\RequiresPhpunitExtension;
+use App\Http\Controllers\bloglist1controller;
 
+Route::get('welcome', function () {
+    Debugbar::info('INFO');
+    Debugbar::error('INFO');
+    Debugbar::warning('INFO');
+    Debugbar::addMessage('INFO');
+    Debugbar::startMeasure('Hello', 'Rendering msg');
+    try {
+        throw new Exception('Test Exception Debugbar');
+    } catch (Exception $e) {
+        Debugbar::addThrowable($e);
+    }
+    $name = 'debugger';
+
+
+    return view('welcome', ['name' => $name]);
+});
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('list', [bloglistcontroller::class, 'list']);
-    Route::get('welcome', [bloglistcontroller::class, 'list']);
+    //   Route::get('welcome', [bloglistcontroller::class, 'list']);
 
     Route::get('profile', [profilecontroller::class, 'profile']);
     Route::get('logout', [logoutcontroller::class, 'logout']);
@@ -40,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('add-blog', fn() => view('addblog'));
         Route::post('bloglist', [bloglistcontroller::class, 'bloglist']);
     });
+    Route::post('export', [bloglistcontroller::class, 'export']);
 
     // Route::middleware(['permission:manage users'])->group(function () {
 
@@ -197,3 +215,17 @@ Route::get('search', [bloglistcontroller::class, 'search']);
 Route::get('view-list', [bloglistcontroller::class, 'viewList']);
 Route::get('list-json', [bloglistcontroller::class, 'listJson']);
 //Route::get('view-list', [bloglistcontroller::class, 'getname']);
+
+
+
+// Route::get('/queue-test', function () {
+//     dispatch(function () {
+//         \Log::info('Queue working');
+//     });
+
+//     return "Dispatched";
+// });
+
+// Route::get("list1", [bloglist1controller::class, 'list1']);
+// Route::get("list1", [bloglist1controller::class, 'bloglist']);
+// Route::get("list1", [bloglist1controller::class, 'list']);

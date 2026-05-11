@@ -9,14 +9,11 @@ use App\Models\blog;
 use Faker\Guesser\Name;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Mail\exportmail;
+use Illuminate\Support\Facades\Cache;
 use File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
-use App\Jobs\exporttask;
 
-class bloglistcontroller extends Controller
+class bloglist1controller extends Controller
 {
 
     function bloglist(Request $request)
@@ -49,19 +46,44 @@ class bloglistcontroller extends Controller
         }
     }
 
-    function list()
+    // function list()
+    // {
+    //     $data = blog::paginate(5);
+    //     return view("bloglist", ["data" => $data]);
+    // }
+
+    public function list1()
     {
-        $data = blog::paginate(5);
-        return view("bloglist", ["data" => $data]);
+        $data = Cache::rememberForever('blogs', function () {
+            return DB::table('blogs')->get();
+        });
+        return response()->json($data);
+
+        // $users = blog::orderBy('id', 'desc')->take(4)->get();
+        // Cache::put('blog', $users, 4);
+        // return $users;
+
+        // $data = Cache::get('blog');
+        // return $data;
+        // Cache::remember('blog', 120, function () {
+        //     return blog::get();
+        // });
+        // echo Cache::set("Item", "Helllo cache");
+        // echo Cache::get('Item');
+        // echo Cache::set('item', blog::all());
+        // dd(Cache::get('item'));
+        // Cache::forget('item');
+        // return blog::all();
+
+        // Cache::put('item', Blog::all()->toArray());
+
+        // dd(Cache::get('item'));
+
+        // return $data = Cache::rememberForever("bigdata", function () {
+        //     return blog::all();
+        // });
     }
 
-    function export(Request $request)
-    {
-
-    //push job in queue
-        exporttask::dispatch($request->user()->email);
-        return redirect("list")->with("success", "email sent");
-    }
 
     private function canModify($blog)
     {
@@ -87,7 +109,7 @@ class bloglistcontroller extends Controller
             }
             $data->delete();
 
-            return redirect("list")->with("success", "Data Deleted");
+            return redirect("list1")->with("success", "Data Deleted");
         }
         return abort(403, 'unauthorized');
     }
@@ -119,7 +141,7 @@ class bloglistcontroller extends Controller
                 $data->image = $path;
             }
             $data->save();
-            return redirect('list');
+            return redirect('list1');
         }
         return abort(403);
     }
@@ -142,6 +164,8 @@ class bloglistcontroller extends Controller
         return view('bloglist', compact('data', 'search'));
     }
 }
+
+
 //     public function listJson(Request $request)
 //     {
 

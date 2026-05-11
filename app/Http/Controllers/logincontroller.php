@@ -37,7 +37,7 @@ class logincontroller extends Controller
                 // app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
 
-                Mail::to($request->email)->send(
+                Mail::to($request->email)->queue(
                     new loginmail("You are Login", "You are login in blog management system")
                 );
 

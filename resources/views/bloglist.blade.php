@@ -93,7 +93,12 @@
         </div>
     </form>
 
-
+<form action="{{ url('export') }}" method="POST" style="display:inline;">
+    @csrf
+    <button type="submit" class="btn btn-info text-white btn-add mb-3">
+        Export Task
+    </button>
+</form>
     @can('create task')
         <a href="{{ url('add-blog') }}" class="btn btn-info text-white btn-add mb-3">
             + Add Blog

@@ -17,8 +17,8 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
 
-  use HasRoles;
-   protected $guard_name = 'web';
+    use HasRoles;
+    protected $guard_name = 'web';
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
