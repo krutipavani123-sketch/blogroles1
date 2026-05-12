@@ -10,7 +10,15 @@
         <a href="{{ route('users.create') }}" class="btn btn-dark btn-sm">Create</a>
     </div>
 
-    <table class="table table-bordered table-hover">
+      <table id="table"
+    class="table table-bordered table-sm"
+    data-toggle="table"
+    data-pagination="true"
+    data-page-size="3"
+    data-side-pagination="client"
+    data-height="auto"
+    data-page-list="[3,5,10,25,50,100,200,All]">
+
         <thead>
             <th class="px-6 py-3 text-left" width="60">No</th>
             <th class="px-6 py-3 text-left">Name</th>

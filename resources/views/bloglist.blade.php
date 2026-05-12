@@ -2,8 +2,19 @@
 @section('title', 'Blog List')
 
 @section('main')
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-<style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.js"></script>--}}
+<style> 
     body{
         background: #f4f6f9;
     }
@@ -21,8 +32,19 @@
     /* SEARCH BOX */
     .search-box{
         display: flex;
-        justify-content: flex-end;
-        gap: 10px;
+        justify-content: flex-end;<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+/* 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.js"></script>
+        gap: 10px; */
         margin-bottom: 15px;
     }
 
@@ -108,7 +130,15 @@
   
     <div class="table-card">
 
-        <table class="table table-bordered table-hover table-sm align-middle mb-0" data-toggle="table">
+     <table id="table"
+    class="table table-bordered table-sm"
+    data-toggle="table"
+    data-pagination="true"
+    data-page-size="3"
+    data-side-pagination="client"
+    data-height="auto"
+    data-page-list="[3,5,10,25,50,100,200,All]">
+
 
             <thead>
                 <tr>
@@ -171,19 +201,39 @@
 
     </div>
 
-    <!-- PAGINATION -->
+    {{-- <!-- PAGINATION -->
     <div class="d-flex justify-content-end mt-3">
         {{ $data->withQueryString()->links() }}
-    </div>
+    </div> --}}
 
 </div>
 
 @endsection
-<style>
+{{-- <style>
 
             .w-5.h-5 {
                 width: 20px;
                 margin-left: auto; 
                 margin-right: 0;
     }   
-        </style>
+        </style> --}}
+
+
+            <style>
+.bootstrap-table .fixed-table-container {
+    border-bottom: 0 !important;
+    height: auto !important;
+}
+
+.bootstrap-table .fixed-table-body {
+    height: auto !important;
+}
+
+.bootstrap-table .fixed-table-pagination {
+    margin-top: 5px !important;
+}
+
+.bootstrap-table {
+    margin-bottom: 0 !important;
+}
+</style>

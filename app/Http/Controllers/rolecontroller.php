@@ -53,7 +53,7 @@ class rolecontroller extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $roles = $query->paginate(3);
+        $roles = $query->get();
 
         return view('roles.list', compact('roles'));
     }

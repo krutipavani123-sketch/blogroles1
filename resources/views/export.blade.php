@@ -8,9 +8,9 @@
     <strong>Title:</strong><li>{{ $item->title }}</li>
     <strong>Description</strong><li>{{ $item->description }}</li>
     <strong>IsFeatured</strong><li>{{ $item->isfeatured ==1?'yes':'no' }}</li>
-   {{-- <li>
-   <img src="{{ asset('storage/' . $item->image) }}" width="100">
-</li> --}}
-    <hr>
+
+
+    
+ 
 @endforeach
 </ul>

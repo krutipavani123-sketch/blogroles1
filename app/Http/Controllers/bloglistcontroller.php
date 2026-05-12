@@ -51,14 +51,15 @@ class bloglistcontroller extends Controller
 
     function list()
     {
-        $data = blog::paginate(5);
+        //$data = blog::paginate(5);
+        $data = blog::all();
         return view("bloglist", ["data" => $data]);
     }
 
     function export(Request $request)
     {
 
-    //push job in queue
+        //push job in queue
         exporttask::dispatch($request->user()->email);
         return redirect("list")->with("success", "email sent");
     }
@@ -137,7 +138,7 @@ class bloglistcontroller extends Controller
             });
         }
 
-        $data = $query->paginate(5);
+        $data = $query->get();
 
         return view('bloglist', compact('data', 'search'));
     }
