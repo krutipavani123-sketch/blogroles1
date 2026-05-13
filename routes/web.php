@@ -229,3 +229,20 @@ Route::get('list-json', [bloglistcontroller::class, 'listJson']);
 // Route::get("list1", [bloglist1controller::class, 'list1']);
 // Route::get("list1", [bloglist1controller::class, 'bloglist']);
 // Route::get("list1", [bloglist1controller::class, 'list']);
+
+
+
+
+
+
+// Route::get('add-blog', fn() => view('addblog'));
+
+// Route::post('bloglist', [bloglist1controller::class, 'bloglist']);
+
+// Route::get('list1', [bloglist1controller::class, 'list']);
+
+// Route::get('edit/{id}', [bloglist1controller::class, 'edit']);
+
+// Route::put('update/{id}', [bloglist1controller::class, 'update']);
+
+// Route::get('delete/{id}', [bloglist1controller::class, 'delete']);

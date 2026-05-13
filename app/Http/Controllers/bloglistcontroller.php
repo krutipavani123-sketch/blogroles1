@@ -15,10 +15,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Jobs\exporttask;
+use App\services\bloglistservice;
 
 class bloglistcontroller extends Controller
 {
-
+    protected $bloglistservice;
+    public function __construct(bloglistservice $bloglistservice)
+    {
+        $this->bloglistservice = $bloglistservice;
+    }
     function bloglist(Request $request)
     {
         $request->validate([
@@ -27,122 +32,178 @@ class bloglistcontroller extends Controller
             'description' => 'required',
             'image' => 'required|image'
         ]);
-        $data = new blog;
-        if ($this->canModify($data)) {
-            $path = $request->file('image')->store('images', 'public');
-
-            $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
-            $data->title = $request->title;
-            $data->description = $request->description;
-            $data->image = $path;
-            $data->user_id = auth()->id();
-            $data->save();
-
-            if ($data) {
-
-                return redirect('welcome')->with('success', 'Blog added successfully!');
-            } else {
-                return "Something went wrong";
-            }
-        } else {
-            return abort(403);
+        try {
+            $this->bloglistservice->bloglist($request);
+            return back()->with('success', 'Blog Added Successfully');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
     }
-
-    function list()
+    public function list()
     {
-        //$data = blog::paginate(5);
-        $data = blog::all();
-        return view("bloglist", ["data" => $data]);
+        return $this->bloglistservice->list();
     }
-
-    function export(Request $request)
+    public function delete($id)
     {
-
-        //push job in queue
-        exporttask::dispatch($request->user()->email);
-        return redirect("list")->with("success", "email sent");
+        return $this->bloglistservice->delete($id);
     }
-
-    private function canModify($blog)
+    public function update(Request $request, $id)
     {
-        $user = auth()->user();
-
-        return $user && (
-            $user->hasRole('admin') ||
-            $user->can('update task') ||
-            $user->can('delete task') ||
-            $user->can('create task')
-        );
+        return $this->bloglistservice->update($request, $id);
     }
-
-    function delete($id)
+    public function edit($id)
     {
-        $data = blog::findOrFail($id);
-
-        if ($this->canModify($data)) {
-
-
-            if ($data->image) {
-                Storage::disk('public')->delete($data->image);
-            }
-            $data->delete();
-
-            return redirect("list")->with("success", "Data Deleted");
-        }
-        return abort(403, 'unauthorized');
-    }
-
-    function edit($id)
-    {
-        $data = blog::findOrFail($id);
-        if ($this->canModify($data)) {
-            return view('edit', ['data' => $data]);
-        }
-
-        return abort(403);
-    }
-
-
-
-    function update(Request $request, $id)
-    {
-        $data = blog::findOrFail($id);
-        if ($this->canModify($data)) {
-            $data->title = $request->title;
-            $data->description = $request->description;
-            $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
-            if ($request->hasFile('image')) {
-                if ($data->image) {
-                    storage::disk('public')->delete($data->image);
-                }
-                $path = $request->file('image')->store('images', 'public');
-                $data->image = $path;
-            }
-            $data->save();
-            return redirect('list');
-        }
-        return abort(403);
-    }
-
-    public function search(Request $request)
-    {
-        $search = $request->search;
-
-        $query = Blog::query();
-
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-        $data = $query->get();
-
-        return view('bloglist', compact('data', 'search'));
+        return $this->bloglistservice->edit($id);
     }
 }
+
+
+
+
+
+// namespace App\Http\Controllers;
+
+// use App\Models\image;
+// use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Str;
+// use App\Models\blog;
+// use Faker\Guesser\Name;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\DB;
+// use App\Mail\exportmail;
+// use File;
+// use Illuminate\Support\Facades\Validator;
+// use Illuminate\Contracts\Queue\ShouldQueue;
+// use Illuminate\Foundation\Queue\Queueable;
+// use App\Jobs\exporttask;
+
+// class bloglistcontroller extends Controller
+// {
+
+//     function bloglist(Request $request)
+//     {
+//         $request->validate([
+
+//             'title' => 'required',
+//             'description' => 'required',
+//             'image' => 'required|image'
+//         ]);
+//         $data = new blog;
+//         if ($this->canModify($data)) {
+//             $path = $request->file('image')->store('images', 'public');
+
+//             $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
+//             $data->title = $request->title;
+//             $data->description = $request->description;
+//             $data->image = $path;
+//             $data->user_id = auth()->id();
+//             $data->save();
+
+//             if ($data) {
+
+//                 return redirect('welcome')->with('success', 'Blog added successfully!');
+//             } else {
+//                 return "Something went wrong";
+//             }
+//         } else {
+//             return abort(403);
+//         }
+//     }
+
+//     function list()
+//     {
+//         //$data = blog::paginate(5);
+//         $data = blog::all();
+//         return view("bloglist", ["data" => $data]);
+//     }
+
+//     function export(Request $request)
+//     {
+
+//         //push job in queue
+//         exporttask::dispatch($request->user()->email);
+//         return redirect("list")->with("success", "email sent");
+//     }
+
+//     private function canModify($blog)
+//     {
+//         $user = auth()->user();
+
+//         return $user && (
+//             $user->hasRole('admin') ||
+//             $user->can('update task') ||
+//             $user->can('delete task') ||
+//             $user->can('create task')
+//         );
+//     }
+
+//     function delete($id)
+//     {
+//         $data = blog::findOrFail($id);
+
+//         if ($this->canModify($data)) {
+
+
+//             if ($data->image) {
+//                 Storage::disk('public')->delete($data->image);
+//             }
+//             $data->delete();
+
+//             return redirect("list")->with("success", "Data Deleted");
+//         }
+//         return abort(403, 'unauthorized');
+//     }
+
+//     function edit($id)
+//     {
+//         $data = blog::findOrFail($id);
+//         if ($this->canModify($data)) {
+//             return view('edit', ['data' => $data]);
+//         }
+
+//         return abort(403);
+//     }
+
+
+
+//     function update(Request $request, $id)
+//     {
+//         $data = blog::findOrFail($id);
+//         if ($this->canModify($data)) {
+//             $data->title = $request->title;
+//             $data->description = $request->description;
+//             $data->isfeatured = $request->has('isfeatured') ? 1 : 0;
+//             if ($request->hasFile('image')) {
+//                 if ($data->image) {
+//                     storage::disk('public')->delete($data->image);
+//                 }
+//                 $path = $request->file('image')->store('images', 'public');
+//                 $data->image = $path;
+//             }
+//             $data->save();
+//             return redirect('list');
+//         }
+//         return abort(403);
+//     }
+
+//     public function search(Request $request)
+//     {
+//         $search = $request->search;
+
+//         $query = Blog::query();
+
+//         if ($search) {
+//             $query->where(function ($q) use ($search) {
+//                 $q->where('title', 'like', "%{$search}%")
+//                     ->orWhere('description', 'like', "%{$search}%");
+//             });
+//         }
+
+//         $data = $query->get();
+
+//         return view('bloglist', compact('data', 'search'));
+//     }
+// }
 //     public function listJson(Request $request)
 //     {
 
